@@ -1,1 +1,1 @@
-# -rush-meta-bot
+# rush-meta-bot
