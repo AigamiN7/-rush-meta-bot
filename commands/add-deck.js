@@ -36,7 +36,6 @@ module.exports = {
 
     async execute(interaction) {
 		let channelName = interaction.member.guild.channels.cache.find(c => c.id === interaction.channelId).name
-		channelName = channelName.slice(3, channelName.length - 3).replace('-', ' ')
 
 		const url = interaction.options.getString('url') 
 		const first_legend = interaction.options.getString('first_legend') && interaction.options.getString('first_legend').split(' ') || []
@@ -65,17 +64,16 @@ module.exports = {
 		var params = {
 			TableName: 'rush-meta',
 			Item: {
-			  'FIRST_LEGEND' : {S: final_first.length > 0 ? final_first[0] : 'undef'},
-			  'SECOND_LEGEND': {S: final_second.length > 0 ? final_second[0] : 'undef'},
-			  'THIRD_LEGEND': {S: final_third.length > 0 ? final_third[0] : 'undef'},
-			  'URL': {S: url || 'undef'},
+			  'FIRST_LEGEND' : {S: final_first.length !== legends.length ? final_first[0] : 'undefined'},
+			  'SECOND_LEGEND': {S: final_second.length !== legends.length ? final_second[0] : 'undefined'},
+			  'THIRD_LEGEND': {S: final_third.length !== legends.length ? final_third[0] : 'undefined'},
+			  'URL': {S: url || 'undefined'},
 			  'CREATED_AT': {S: `${new Date(Date.now())}`},
-			  'DECK_TYPE': {S: channelName || 'undef'},
+			  'DECK_TYPE': {S: channelName || 'undefined'},
 			  'aigami': {S: `${new Date(Date.now())}`}
 			}
 		};
 		  
-		// Call DynamoDB to add the item to the table
 		ddb.putItem(params, function(err, data) {
 		if (err) {
 			console.log("Error", err);
