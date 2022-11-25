@@ -14,7 +14,7 @@ var docClient = new AWS.DynamoDB.DocumentClient()
 
 module.exports = {
     data: new SlashCommandBuilder()
-        .setName('weekly-report')
+        .setName('lookup-meta')
         .setDescription('Generates meta report for the past week')
         .addStringOption(option =>
             option.setName('report_type')
@@ -24,15 +24,31 @@ module.exports = {
 				{ name: 'legends' , value: 'legends' },
 				{ name: 'both', value: 'both' }
 			)
+            .setRequired(true))
+        .addStringOption(option =>
+            option.setName('from')
+            .setDescription('Start date DD-MM-YYYY')
+            .setRequired(true))
+        .addStringOption(option =>
+            option.setName('until')
+            .setDescription('End date DD-MM-YYYY')
             .setRequired(true)),
     async execute(interaction) {
 		let channel = interaction.member.guild.channels.cache.find(c => c.id === interaction.channelId)
 
 		const reportType = interaction.options.getString('report_type') 
+        let from = interaction.options.getString('from')
+        let until = interaction.options.getString('until')
 
-		const startDate = new Date(Date.now())
-		startDate.setDate(startDate.getDate() - 7)
-		const endDate = new Date(Date.now())
+        from = from.split('-')
+        from = `${from[1]}-${from[0]}-${from[2]}`
+
+        until = until.split('-')
+        until = `${until[1]}-${until[0]}-${until[2]}`
+
+		const startDate = new Date(from)
+		const endDate = new Date(until)
+        endDate.setHours(endDate.getHours() + 23)
 
 		var params = {
 			TableName: 'rush-meta',
@@ -137,7 +153,7 @@ module.exports = {
 				}
 
 
-				const table = new AsciiTable3(`*Rush Duel Meta for Week: ${startDate.toDateString()} -> ${endDate.toDateString()}*`)
+				const table = new AsciiTable3(`*Rush Duel Meta for Date Range: ${startDate.toDateString()} -> ${endDate.toDateString()}*`)
 				
 				while (decks.length < legends.length) {
 					decks = [...decks, [new Array(longestString.length).join(' '), '']]
@@ -191,9 +207,10 @@ module.exports = {
 				for (line of tableString.split('\n')) {
 					line && line !== '' && await channel.send(line)
 				}
+
 			}
 		})
 
-		interaction.reply('.')
+        interaction.reply('.')
     },
 };
