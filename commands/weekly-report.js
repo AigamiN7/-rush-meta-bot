@@ -82,6 +82,14 @@ module.exports = {
 							decks[entry.DECK_TYPE] = 1
 						}
 					}
+
+					if (entry.FIRST_LEGEND === 'undefined' && entry.SECOND_LEGEND === 'undefined' && entry.THIRD_LEGEND === 'undefined') {
+						if (legends["None"]) {
+							legends["None"] = legends["None"] + 1
+						} else {
+							legends["None"] = 1
+						}
+					}
 				}
 
 
@@ -119,15 +127,15 @@ module.exports = {
 
 				let headings = []
 				if (reportType === 'both') {
-					headings = ['**Decks**', '**Amount**', '**Legends**', '**Amount**']
+					headings = [`**Decks (${(decks.length)} Total)**`, '**Amount**', `**Legends (${decks.length} Total)**`, '**Amount**']
 				}
 
 				if (reportType === 'legends') {
-					headings = ['**Legends**', '**Amount**']
+					headings = [`**Legends (${decks.length} Total)**`, '**Amount**']
 				}
 
 				if (reportType === 'decks') {
-					headings = ['**Decks**', '**Amount**']
+					headings = [`**Decks (${(decks.length)} Total)**`, '**Amount**']
 				}
 
 				for (let idx in headings) {
@@ -194,6 +202,6 @@ module.exports = {
 			}
 		})
 
-		interaction.reply('.')
+        interaction.reply('Curated by Voltalon#3223 & AigamiN7#8269')
     },
 };
