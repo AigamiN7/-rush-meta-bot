@@ -96,6 +96,10 @@ module.exports = {
 				decks = Object.entries(decks).sort((a,b) => b[1] - a[1])
 				legends = Object.entries(legends).sort((a,b) => b[1] - a[1])
 
+				const totalDecks = decks.reduce((val1, val2) => val1 + val2[1], 0)
+				const totalLegends = legends.reduce((val1, val2) => val1 + val2[1], 0)
+
+
 				let longestString = ''
 				for (let entry of decks) {
 					if (entry[0].length > longestString.length) {
@@ -127,15 +131,15 @@ module.exports = {
 
 				let headings = []
 				if (reportType === 'both') {
-					headings = [`**Decks (${(decks.length)} Total)**`, '**Amount**', `**Legends (${decks.length} Total)**`, '**Amount**']
+					headings = [`**Decks (${(totalDecks)} Total)**`, '**Amount**', `**Legends (${totalLegends} Total)**`, '**Amount**']
 				}
 
 				if (reportType === 'legends') {
-					headings = [`**Legends (${decks.length} Total)**`, '**Amount**']
+					headings = [`**Legends (${totalLegends} Total)**`, '**Amount**']
 				}
 
 				if (reportType === 'decks') {
-					headings = [`**Decks (${(decks.length)} Total)**`, '**Amount**']
+					headings = [`**Decks (${(totalDecks)} Total)**`, '**Amount**']
 				}
 
 				for (let idx in headings) {
@@ -165,9 +169,9 @@ module.exports = {
 					.addRowMatrix([
 						...decks.map((o, idx) => [
 							o[0], 
-							`${o[1]} (${((o[1] / decks.length) * 100).toFixed(2)}%)`,
+							`${o[1]} (${((o[1] / totalDecks) * 100).toFixed(2)}%)`,
 							legends[idx][0],
-							`${legends[idx][1]} (${((legends[idx][1] / legends.length) * 100).toFixed(2)}%)`
+							`${legends[idx][1]} (${((legends[idx][1] / totalLegends) * 100).toFixed(2)}%)`
 						])
 					]);
 				} else if (reportType === 'decks') {
@@ -178,7 +182,7 @@ module.exports = {
 					.addRowMatrix([
 						...decks.map((o, idx) => [
 							o[0], 
-							`${o[1]} (${((o[1] / decks.length) * 100).toFixed(2)}%)`
+							`${o[1]} (${((o[1] / totalDecks) * 100).toFixed(2)}%)`
 						])
 					]);
 				} else {
@@ -189,7 +193,7 @@ module.exports = {
 					.addRowMatrix([
 						...legends.map((o, idx) => [
 							o[0], 
-							`${o[1]} (${((o[1] / legends.length) * 100).toFixed(2)}%)`
+							`${o[1]} (${((o[1] / totalLegends) * 100).toFixed(2)}%)`
 						])
 					]);
 				}
