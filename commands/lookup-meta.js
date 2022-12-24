@@ -48,6 +48,24 @@ module.exports = {
 
 		const startDate = new Date(from)
 		const endDate = new Date(until)
+
+		if (startDate.toString() === "Invalid Date" || endDate.toString() === "Invalid Date") {
+			interaction.reply("Invalid Date Given")
+			return
+		}
+
+		if (endDate < startDate) {
+			interaction.reply("Cannot generate a report, end date is before the start date")
+			return
+		}
+
+		const CUT_OFF = new Date('11-24-2022')
+
+		if (startDate < CUT_OFF) {
+			interaction.reply("Data began being aggregated on Nov. 24, 2022, can't generate report for the provided dates")
+			return
+		}
+
         endDate.setHours(endDate.getHours() + 23)
 
 		var params = {
@@ -163,7 +181,6 @@ module.exports = {
 					}
 				}
 
-
 				const table = new AsciiTable3(`*Rush Duel Meta for Date Range: ${startDate.toDateString()} -> ${endDate.toDateString()}*`)
 				
 				while (decks.length < legends.length) {
@@ -222,6 +239,6 @@ module.exports = {
 			}
 		})
 
-        interaction.reply('Curated by Voltalon#3223 & AigamiN7#8269')
+        interaction.reply('Curated by Voltalon#3223 & AigamiN7#8269 since November 24, 2022')
     },
 };

@@ -37,6 +37,20 @@ module.exports = {
     async execute(interaction) {
 		let channelName = interaction.member.guild.channels.cache.find(c => c.id === interaction.channelId).name
 
+
+		const VOLT_ID = '504179556257628170'
+		const AIGAMI_ID = '759271716827955221'
+		if (interaction.member.guild.id !== '930982794358833222') {
+			interaction.reply(`Only members of the Goha Dueling Bar can use this command, join the server to contribute`);
+			return
+		}
+
+		const ALLOWED_IDS = [VOLT_ID, AIGAMI_ID]
+		if (!ALLOWED_IDS.includes(interaction.member.user.id)) {
+			interaction.reply(`You are unauthorized to use this command, if you believe this is a mistake reach out to Aigami`);
+			return
+		}
+
 		const url = interaction.options.getString('url') 
 		const first_legend = interaction.options.getString('first_legend') && interaction.options.getString('first_legend').split(' ') || []
 		const second_legend = interaction.options.getString('second_legend') && interaction.options.getString('second_legend').split(' ') || []
