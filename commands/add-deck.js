@@ -89,13 +89,12 @@ module.exports = {
 		};
 		  
 		ddb.putItem(params, function(err, data) {
-		if (err) {
-			console.log("Error", err);
-		} else {
-			console.log("Success", data);
-		}
+			if (err) {
+				console.log("Error", err);
+			} else {
+				console.log("Success", data);
+			}
 		});
-
 
         await interaction.reply(`
 ${url} Added to the database 😈
