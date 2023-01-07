@@ -31,7 +31,7 @@ module.exports = {
 		const reportType = interaction.options.getString('report_type') 
 
 		const startDate = new Date(Date.now())
-		startDate.setDate(startDate.getDate() - 7)
+		startDate.setDate(startDate.getDate() - 6)
 		const endDate = new Date(Date.now())
 
 		var params = {
